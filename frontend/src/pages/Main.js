@@ -12,16 +12,11 @@ const Main = () => {
                     <Link to="/register" className="main__btn">
                         Register
                     </Link>
-                    <Link to="/register" className="main__btn">
+                    <Link to="/login" className="main__btn">
                         Log In
                     </Link>
                 </div>
             </div>
-
-            {/*<div className="main__helpers">*/}
-            {/*    <h1>Vrei sa saska0efw poporul ucrainean ?</h1>*/}
-            {/*    <h1>Second</h1>*/}
-            {/*</div>*/}
         </div>
     );
 };
