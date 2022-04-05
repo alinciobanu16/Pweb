@@ -1,0 +1,57 @@
+.main__container {
+    font-family: 'Roboto', sans-serif;
+    background-image: linear-gradient(rgb(0 0 0 / 90%), rgb(0 0 0 / 70%)),
+                    url("/src/pages/images/daniele-franchi-Z6PXiOhevCE-unsplash.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    background-position: center;
+}
+
+.main__text {
+    width: 100%;
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.main__helpers {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    flex: 1 1 0;
+    text-align: center;
+    color: white;
+}
+
+.main__helpers h1 {
+    font-size: 3.125rem;
+    font-weight: bold;
+    max-width: 32rem;
+    margin-right: 2rem;
+    line-height: 3.5rem;
+    letter-spacing: 1.3px;
+}
+
+.main__btn {
+    background-color: white;
+    border: none;
+    color: black;
+    text-align: center;
+    padding: 14px 50px;
+    margin: 4px 15px;
+    font-size: 18px;
+    transition: 0.3s;
+    transition-property: background-color;
+    letter-spacing: 1.3px;
+}
+
+.main__btn:hover {
+    background-color: black;
+    color: white;
+}
