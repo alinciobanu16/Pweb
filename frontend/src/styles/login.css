@@ -1,0 +1,77 @@
+.lg__container {
+    background-image: url("/src/pages/images/ben-masora-p9Y6TIPhKBw-unsplash.jpg");
+    background-position: center;
+    background-origin: content-box;
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height:100vh;
+}
+
+.lg__text-center{
+    color:#fff;
+    text-transform:uppercase;
+    font-size: 23px;
+    margin: -50px 0 80px 0;
+    display: block;
+    text-align: center;
+}
+.lg__box{
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform: translate(-50%,-50%);
+    background-color: rgba(0, 0, 0, 0.89);
+    border-radius:3px;
+    padding:70px 100px;
+}
+.lg__input-container{
+    position:relative;
+    margin-bottom:25px;
+}
+.lg__input-container label{
+    position:absolute;
+    top:0;
+    left:0;
+    font-size:16px;
+    color:#fff;
+    pointer-event:none;
+    transition: all 0.5s ease-in-out;
+}
+.lg__input-container input{
+    border:0;
+    border-bottom:1px solid #555;
+    background:transparent;
+    width:100%;
+    padding:8px 0 5px 0;
+    font-size:16px;
+    color:#fff;
+}
+.lg__input-container input:focus{
+    border:none;
+    outline:none;
+    border-bottom:1px solid #e74c3c;
+}
+.lg__btn{
+    color:#fff;
+    background-color:#e74c3c;
+    outline: none;
+    border: 0;
+    padding:10px 20px;
+    text-transform:uppercase;
+    margin-top:50px;
+    border-radius:2px;
+    cursor:pointer;
+    position:relative;
+    transition: 0.3s;
+}
+
+.lg__btn:hover {
+    background-color: red;
+}
+
+.lg__input-container input:focus ~ label,
+.lg__input-container input:valid ~ label{
+    top:-12px;
+    font-size:12px;
+
+}

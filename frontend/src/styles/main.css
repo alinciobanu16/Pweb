@@ -34,8 +34,15 @@
     font-weight: bold;
     max-width: 32rem;
     margin-right: 2rem;
+    margin-left: 2rem;
     line-height: 3.5rem;
     letter-spacing: 1.3px;
+}
+
+.main__container__btn {
+    display: flex;
+    flex-direction: row;
+    margin-top: 1.25rem;
 }
 
 .main__btn {
@@ -49,9 +56,22 @@
     transition: 0.3s;
     transition-property: background-color;
     letter-spacing: 1.3px;
+    width: 180px;
 }
 
 .main__btn:hover {
     background-color: black;
     color: white;
+}
+
+@media screen and (max-width: 600px) {
+    .main__helpers h1 {
+        font-size: 1.7rem;
+        line-height: 2.2rem;
+    }
+
+    .main__btn {
+        padding: 8px 15px;
+        width: 100px;
+    }
 }
