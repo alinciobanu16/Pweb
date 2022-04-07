@@ -1,7 +1,11 @@
 import "../styles/main.css";
 import { Link } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Main = () => {
+    const { loginWithRedirect } = useAuth0();
+    const { logout } = useAuth0();
+    const redirectUri = "http://localhost:3000/refugee";
     return (
         <div className="main__container">
             <div className="main__helpers">
@@ -14,9 +18,22 @@ const Main = () => {
                     <Link to="/register" className="main__btn">
                         Register
                     </Link>
-                    <Link to="/login" className="main__btn">
+                    <button
+                        className="main__btn"
+                        onClick={() =>
+                            loginWithRedirect({ redirectUri: redirectUri })
+                        }
+                    >
                         Log In
-                    </Link>
+                    </button>
+                    <button
+                        className="main__btn"
+                        onClick={() =>
+                            logout({ returnTo: window.location.origin })
+                        }
+                    >
+                        Log Out
+                    </button>
                 </div>
             </div>
         </div>
