@@ -2,7 +2,10 @@ import { useAuth0 } from "@auth0/auth0-react";
 import "../styles/main.css";
 
 const Refugee = () => {
-    const { logout, getAccessTokenSilently } = useAuth0();
+    const { logout, getAccessTokenSilently, user, isAuthenticated } =
+        useAuth0();
+
+    console.log(isAuthenticated);
 
     const callApi = () => {
         fetch("http://localhost/api/public")
@@ -19,7 +22,7 @@ const Refugee = () => {
     const getRoute = async () => {
         const token = await getAccessTokenSilently();
         console.log(token);
-        const res = await fetch("http://localhost/api/public", {
+        const res = await fetch("http://localhost/api/private", {
             method: "GET",
             headers: {
                 "Content-type": "application/json",
@@ -37,9 +40,15 @@ const Refugee = () => {
             >
                 Log Out
             </button>
-            <button className="main__btn" onClick={callApi2}>
+            <button className="main__btn" onClick={getRoute}>
                 Get Route
             </button>
+
+            {isAuthenticated && (
+                <pre style={{ textAlign: "start" }}>
+                    {JSON.stringify(user, "salut", 2)}
+                </pre>
+            )}
         </div>
     );
 };
