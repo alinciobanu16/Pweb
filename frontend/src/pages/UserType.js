@@ -1,4 +1,4 @@
-import "../styles/main.css";
+import "../styles/usertype.css";
 import {
     FormControl,
     InputLabel,
@@ -6,37 +6,66 @@ import {
     Select,
     styled,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useNavigate } from "react-router-dom";
 
 const UserType = () => {
-    const { logout, getAccessTokenSilently, isAuthenticated, user } =
+    const { logout, getAccessTokenSilently, isAuthenticated, user, isLoading } =
         useAuth0();
 
-    const [data, setData] = useState({
-        fullName: "",
+    const navigate = useNavigate();
+
+    const [userData, setUserData] = useState({
+        name: "",
         username: "",
         email: "",
-        password: "",
         userType: "",
     });
 
-    const handleChange = (e) => {
-        setData({
-            ...data,
-            [e.target.name]: e.target.value,
-        });
+    const [errors, setErrors] = useState([]);
 
-        // setData({
-        //     ...data, email: user.email
-        // })
+    const handleChange = (e) => {
+        if (isAuthenticated) {
+            setUserData({
+                ...userData,
+                name: user.name,
+                username: user.nickname,
+                email: user.email,
+                [e.target.name]: e.target.value,
+            });
+        }
     };
 
-    console.log(user);
+    useEffect(() => {
+        const fetchData = async () => {
+            const res = await fetch("http://localhost/api/users");
+        };
+    });
 
     console.log(isAuthenticated);
+    console.log(userData);
 
-    console.log(data);
+    const saveData = async (e) => {
+        e.preventDefault();
+        const token = await getAccessTokenSilently();
+        const res = await fetch("http://localhost/api/save-user", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+                Authorization: "Bearer " + token,
+            },
+            body: JSON.stringify(userData),
+        });
+
+        const data = await res.json();
+        console.log(data);
+        if (data.success) {
+            navigate(`/${userData.userType}`);
+        } else {
+            setErrors(data.errors);
+        }
+    };
 
     const CssTextField = styled(FormControl)({
         "& label.Mui-focused": {
@@ -61,7 +90,9 @@ const UserType = () => {
     return (
         <div className="main__container">
             <div className="main__helpers">
-                <CssTextField sx={{ mt: 2, width: "30%" }}>
+                <CssTextField
+                    sx={{ mt: 2, width: "30%", marginBottom: "10px" }}
+                >
                     <InputLabel
                         id="demo-simple-select-helper-label"
                         sx={{ color: "white", textAlign: "center" }}
@@ -72,7 +103,7 @@ const UserType = () => {
                         sx={{ color: "white" }}
                         labelId="demo-simple-select-helper-label"
                         id="demo-simple-select-helper"
-                        value={data.userType}
+                        value={userData.userType}
                         label="Why you register?"
                         name="userType"
                         onChange={handleChange}
@@ -85,8 +116,14 @@ const UserType = () => {
                         </MenuItem>
                     </Select>
                 </CssTextField>
+                <span className="text-xs text-red-500 pb-2">
+                    {!!errors && errors.email}
+                </span>
+                <button className="type__btn" onClick={saveData}>
+                    Submit
+                </button>
                 <button
-                    className="main__btn"
+                    className="type__btn"
                     onClick={() => logout({ returnTo: window.location.origin })}
                 >
                     Log Out

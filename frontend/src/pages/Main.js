@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const Main = () => {
-    const { loginWithRedirect, loginWithPopup } = useAuth0();
-    const redirectUri = "http://localhost:3000/refugee";
+    const { loginWithRedirect, loginWithPopup, logout } = useAuth0();
+    const redirectUri = "http://localhost:3000/user-type";
     return (
         <div className="main__container">
             <div className="main__helpers">
@@ -24,6 +24,14 @@ const Main = () => {
                         }
                     >
                         Log In
+                    </button>
+                    <button
+                        className="main__btn"
+                        onClick={() =>
+                            logout({ returnTo: window.location.origin })
+                        }
+                    >
+                        Log Out
                     </button>
                 </div>
             </div>
