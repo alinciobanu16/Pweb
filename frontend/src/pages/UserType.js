@@ -23,7 +23,7 @@ const UserType = () => {
         userType: "",
     });
 
-    const [userType, setUserType] = useState("");
+    const [userType, setUserType] = useState("non");
     const [errors, setErrors] = useState([]);
 
     const handleChange = (e) => {
@@ -53,13 +53,13 @@ const UserType = () => {
             console.log(data);
             if (data.success) {
                 setUserType(data.userType);
-            }
+            } else setUserType("");
         };
 
         if (isAuthenticated) {
             fetchData();
         }
-    }, [user]);
+    }, [isAuthenticated]);
 
     console.log(isAuthenticated);
     console.log(userData);
@@ -106,72 +106,139 @@ const UserType = () => {
         },
     });
 
+    // if (isLoading) return <div>Loading...</div>;
+
     return (
-        <div className="main__container">
-            <div className="main__helpers">
-                {!!userType ? (
-                    <>
-                        <InputLabel
-                            id="demo-simple-select-helper-label"
-                            sx={{
-                                color: "white",
-                                textAlign: "center",
-                                marginBottom: "5px",
-                            }}
-                        >
-                            Welcome back, {user.name}
-                        </InputLabel>
-                        <Link to={`/${userType}`} className="type__btn">
-                            Continue
-                        </Link>
-                    </>
-                ) : (
-                    <>
-                        <CssTextField
-                            sx={{ mt: 2, width: "30%", marginBottom: "10px" }}
-                        >
+        isAuthenticated && (
+            <div className="main__container">
+                <div className="main__helpers">
+                    {userType.length >= 4 && (
+                        <>
                             <InputLabel
                                 id="demo-simple-select-helper-label"
-                                sx={{ color: "white", textAlign: "center" }}
+                                sx={{
+                                    color: "white",
+                                    textAlign: "center",
+                                    marginBottom: "5px",
+                                }}
                             >
-                                Why you register?
+                                Welcome back, {user.name}
                             </InputLabel>
-                            <Select
-                                sx={{ color: "white" }}
-                                labelId="demo-simple-select-helper-label"
-                                id="demo-simple-select-helper"
-                                value={userData.userType}
-                                label="Why you register?"
-                                name="userType"
-                                onChange={handleChange}
+                            <Link to={`/${userType}`} className="type__btn">
+                                Continue
+                            </Link>
+                            <button
+                                className="type__btn"
+                                onClick={() =>
+                                    logout({ returnTo: window.location.origin })
+                                }
                             >
-                                <MenuItem value="helper">
-                                    I want to help ukrainian refugees
-                                </MenuItem>
-                                <MenuItem value="refugee">
-                                    I am an ukrainian refugee and I need help
-                                </MenuItem>
-                            </Select>
-                        </CssTextField>
-                        <span className="text-xs text-red-500 pb-2">
-                            {!!errors && errors.email}
-                        </span>
-                        <button className="type__btn" onClick={saveData}>
-                            Submit
-                        </button>
-                        <button
-                            className="type__btn"
-                            onClick={() =>
-                                logout({ returnTo: window.location.origin })
-                            }
-                        >
-                            Log Out
-                        </button>
-                    </>
-                )}
+                                Log Out
+                            </button>
+                        </>
+                    )}
+
+                    {userType.length === 0 && (
+                        <>
+                            <CssTextField
+                                sx={{
+                                    mt: 2,
+                                    width: "30%",
+                                    marginBottom: "10px",
+                                }}
+                            >
+                                <InputLabel
+                                    id="demo-simple-select-helper-label"
+                                    sx={{ color: "white", textAlign: "center" }}
+                                >
+                                    Why you register?
+                                </InputLabel>
+                                <Select
+                                    sx={{ color: "white" }}
+                                    labelId="demo-simple-select-helper-label"
+                                    id="demo-simple-select-helper"
+                                    value={userData.userType}
+                                    label="Why you register?"
+                                    name="userType"
+                                    onChange={handleChange}
+                                >
+                                    <MenuItem value="helper">
+                                        I want to help ukrainian refugees
+                                    </MenuItem>
+                                    <MenuItem value="refugee">
+                                        I am an ukrainian refugee and I need
+                                        help
+                                    </MenuItem>
+                                </Select>
+                            </CssTextField>
+                            <span className="text-xs text-red-500 pb-2">
+                                {!!errors && errors.email}
+                            </span>
+                            <button className="type__btn" onClick={saveData}>
+                                Submit
+                            </button>
+                            <button
+                                className="type__btn"
+                                onClick={() =>
+                                    logout({ returnTo: window.location.origin })
+                                }
+                            >
+                                Log Out
+                            </button>
+                        </>
+                    )}
+                </div>
             </div>
-        </div>
+        )
     );
 };
 
 export default UserType;
+
+// <>
+//     <CssTextField
+//         sx={{
+//             mt: 2,
+//             width: "30%",
+//             marginBottom: "10px",
+//         }}
+//     >
+//         <InputLabel
+//             id="demo-simple-select-helper-label"
+//             sx={{ color: "white", textAlign: "center" }}
+//         >
+//             Why you register?
+//         </InputLabel>
+//         <Select
+//             sx={{ color: "white" }}
+//             labelId="demo-simple-select-helper-label"
+//             id="demo-simple-select-helper"
+//             value={userData.userType}
+//             label="Why you register?"
+//             name="userType"
+//             onChange={handleChange}
+//         >
+//             <MenuItem value="helper">
+//                 I want to help ukrainian refugees
+//             </MenuItem>
+//             <MenuItem value="refugee">
+//                 I am an ukrainian refugee and I need
+//                 help
+//             </MenuItem>
+//         </Select>
+//     </CssTextField>
+//     <span className="text-xs text-red-500 pb-2">
+//                                     {!!errors && errors.email}
+//                                 </span>
+//     <button className="type__btn" onClick={saveData}>
+//         Submit
+//     </button>
+//     <button
+//         className="type__btn"
+//         onClick={() =>
+//             logout({ returnTo: window.location.origin })
+//         }
+//     >
+//         Log Out
+//     </button>
+// </>
