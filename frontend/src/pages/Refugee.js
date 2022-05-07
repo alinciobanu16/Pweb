@@ -44,6 +44,8 @@ const Refugee = () => {
                 Get Route
             </button>
 
+            <button className="btn btn-primary">Bootstrap button</button>
+
             {isAuthenticated && (
                 <pre style={{ textAlign: "start" }}>
                     {JSON.stringify(user, "salut", 2)}

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HelperController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,5 +40,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group(['middleware' => ['auth0.authorize']], function () {
     Route::post('/save-user', [UserController::class, 'store']);
     Route::post('/check-user', [UserController::class, 'check_user']);
+    Route::post('/helper', [HelperController::class, 'store']);
 });
 
