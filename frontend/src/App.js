@@ -5,6 +5,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Refugee from "./pages/Refugee";
 import UserType from "./pages/UserType";
+import Helper from "./pages/Helper";
 
 function App() {
     return (
@@ -14,6 +15,7 @@ function App() {
                 <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/refugee" element={<Refugee />} />
+                <Route path="/helper" element={<Helper />} />
                 <Route path="/user-type" element={<UserType />} />
             </Routes>
         </BrowserRouter>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use http\Env\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -32,6 +33,23 @@ class UserController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'User successfully added',
+        ]);
+    }
+
+    public function check_user(Request $request):JsonResponse
+    {
+        $name = $request->name;
+        $email = $request->email;
+        $user = User::all()->where('email', $email)->first();
+        if ($user) {
+            return response()->json([
+                'success' => true,
+                'userType' => $user->userType,
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
         ]);
     }
 }
