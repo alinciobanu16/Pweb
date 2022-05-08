@@ -41,5 +41,6 @@ Route::group(['middleware' => ['auth0.authorize']], function () {
     Route::post('/save-user', [UserController::class, 'store']);
     Route::post('/check-user', [UserController::class, 'check_user']);
     Route::post('/helper', [HelperController::class, 'store']);
+    Route::get('/helper', [HelperController::class, 'get_helpers']);
 });
 

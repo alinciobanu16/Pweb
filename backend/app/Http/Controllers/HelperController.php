@@ -37,4 +37,20 @@ class HelperController extends Controller
             'message' => 'Helper successfully added',
         ]);
     }
+
+    public function get_helpers(): JsonResponse
+    {
+        $helpers = Helper::all();
+
+        if ($helpers->isEmpty()) {
+            return response()->json([
+                'success' => false,
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'helpers' => $helpers,
+        ]);
+    }
 }
