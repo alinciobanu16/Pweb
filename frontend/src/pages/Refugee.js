@@ -1,5 +1,42 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import "../styles/main.css";
+import "../styles/refugee.css";
+import { useEffect, useRef, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+
+const sidebarNavItems = [
+    {
+        display: 'Dashboard',
+        icon: <i className='bx bx-home'></i>,
+        to: '/',
+        section: ''
+    },
+    {
+        display: 'Getting Started',
+        icon: <i className='bx bx-star'></i>,
+        to: '/started',
+        section: 'started'
+    },
+    {
+        display: 'Calendar',
+        icon: <i className='bx bx-calendar'></i>,
+        to: '/calendar',
+        section: 'calendar'
+    },
+    {
+        display: 'User',
+        icon: <i className='bx bx-user'></i>,
+        to: '/user',
+        section: 'user'
+    },
+    {
+        display: 'Orders',
+        icon: <i className='bx bx-receipt'></i>,
+        to: '/order',
+        section: 'order'
+    },
+]
+
 
 const Refugee = () => {
     const { logout, getAccessTokenSilently, user, isAuthenticated } =
@@ -33,23 +70,37 @@ const Refugee = () => {
         console.log(data);
     };
     return (
-        <div>
-            <button
-                className="main__btn"
-                onClick={() => logout({ returnTo: window.location.origin })}
-            >
-                Log Out
-            </button>
-            <button className="main__btn" onClick={getRoute}>
-                Get Route
-            </button>
+      <div className="page-container">
+        <div className="container">
+          {isAuthenticated && <div className="profile-details-container" >
+            <div className="image-container">
+              <img src={user.picture}></img>
+            </div>
+            <div className="full-name">
+              {user.given_name} {user.family_name}
+              </div>
+              
+              <button
+                  className="main__btn"
+                  onClick={() => logout({ returnTo: window.location.origin })}
+              >
+                  Log Out
+              </button>
+              <button className="main__btn" onClick={getRoute}>
+                  Get Route
+              </button>
+          </div> }
 
-            {isAuthenticated && (
-                <pre style={{ textAlign: "start" }}>
-                    {JSON.stringify(user, "salut", 2)}
-                </pre>
-            )}
+          <div className="content">
+
+              {isAuthenticated && (
+                  <pre style={{ textAlign: "start" }}>
+                      {JSON.stringify(user, "salut", 2)}
+                  </pre>
+              )}
+          </div>
         </div>
+      </div>
     );
 };
 

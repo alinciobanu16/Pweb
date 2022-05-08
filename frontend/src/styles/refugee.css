@@ -1,0 +1,50 @@
+.page-container {
+  background-image: linear-gradient(rgb(0 0 0 / 50%), rgb(0 0 0 / 50%)), url("../pages/images/ben-masora-p9Y6TIPhKBw-unsplash.jpg");
+  font-family: 'Roboto', sans-serif;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100vh;
+  background-position: center;
+}
+
+.container {
+  justify-content: center;
+  display: flex;
+  padding: 1em;
+  text-align: center;
+}
+
+/* .container:first-child {
+  width: 250px;
+} */
+
+.container > * {
+  flex: 0 0 auto;
+}
+
+.profile-details-container {
+  padding: 1em;
+  /* temporar height  */
+  height: 400px; 
+  width: 15em;
+  text-align: -webkit-center;
+  background-color: rgb(220, 220, 220, 0.8);
+  border-radius: 0.5em;
+  margin-right: 1em;
+}
+
+.content {
+  width: 40em;
+  background-color: rgb(220, 220, 220, 0.8);
+  border-radius: 0.5em;
+}
+
+.main__btn {
+  background-color: #294664;
+  color: white;
+  padding: 10px;
+}
+
+.full-name {
+  margin: 1em 0 0.7em 0;
+}
