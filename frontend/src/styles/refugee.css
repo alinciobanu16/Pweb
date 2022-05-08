@@ -28,18 +28,18 @@
   height: 400px; 
   width: 15em;
   text-align: -webkit-center;
-  background-color: rgb(220, 220, 220, 0.8);
+  background-color: rgb(225, 225, 225, 0.9);
   border-radius: 0.5em;
   margin-right: 1em;
 }
 
 .content {
   width: 40em;
-  background-color: rgb(220, 220, 220, 0.8);
+  background-color: rgb(225, 225, 225, 0.9);
   border-radius: 0.5em;
 }
 
-.main__btn {
+.refugee-btn {
   background-color: #294664;
   color: white;
   padding: 10px;

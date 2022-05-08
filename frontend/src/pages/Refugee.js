@@ -81,12 +81,12 @@ const Refugee = () => {
               </div>
               
               <button
-                  className="main__btn"
+                  className="main__btn refugee-btn"
                   onClick={() => logout({ returnTo: window.location.origin })}
               >
                   Log Out
               </button>
-              <button className="main__btn" onClick={getRoute}>
+              <button className="main__btn refugee-btn" onClick={getRoute}>
                   Get Route
               </button>
           </div> }
