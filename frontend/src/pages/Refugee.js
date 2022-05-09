@@ -2,7 +2,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import "../styles/main.css";
 import "../styles/refugee.css";
 import { useEffect, useRef, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import defaultProfilePicture from "./images/profile-picture.png"
 
 const sidebarNavItems = [
     {
@@ -91,42 +91,65 @@ const Refugee = () => {
         }
     }, [user]);
 
+    function getImage() {
+      if (user.picture) {
+        return <img src={user.picture} />
+      }
+
+      return <img src={defaultProfilePicture} />
+    }
+
     console.log(helpers);
 
     return (
         <div className="page-container">
             <div className="container">
                 {isAuthenticated && (
+                  <div>
                     <div className="profile-details-container">
                         <div className="image-container">
-                            <img src={user.picture}></img>
+                          {getImage()}
                         </div>
                         <div className="full-name">
                             {user.given_name} {user.family_name}
                         </div>
-
-                        <button
-                            className="main__btn refugee-btn"
-                            onClick={() =>
-                                logout({ returnTo: window.location.origin })
-                            }
-                        >
-                            Log Out
-                        </button>
-                        <button
-                            className="main__btn refugee-btn"
-                            onClick={getRoute}
-                        >
-                            Get Route
-                        </button>
+                        <div className="btn-container">
+                          <button
+                              className="main__btn refugee-btn"
+                              onClick={() =>
+                                  logout({ returnTo: window.location.origin })
+                              }
+                          >
+                              Log Out
+                          </button>
+                          <button
+                              className="main__btn refugee-btn"
+                              onClick={getRoute}
+                          >
+                              Get Route
+                          </button>
+                        </div>
                     </div>
+                  </div>
                 )}
 
                 <div className="content">
-                    {isAuthenticated && (
-                        <pre style={{ textAlign: "start" }}>
-                            {JSON.stringify(user, "salut", 2)}
-                        </pre>
+                    {helpers.length != 0 && (
+                        <ul>
+                          {
+                            helpers.map((value, index) => {
+                              return <li className="items-list">
+                                <div className="top-row">{value.help_type}</div>
+                                <div className="middle-row">
+                                    <div id="person-details">{value.fullName}, <i>{value.person_type}</i></div>
+                                    <div>Email: {value.email}</div>
+                                    <div>Phone: {value.phone_number}</div>
+                                </div>
+                                <div className="bottom-row"><u>Mesaj</u>: {value.message}</div>
+                              </li>
+                            })
+                          }
+                        </ul>
                     )}
                 </div>
             </div>
