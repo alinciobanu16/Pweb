@@ -2,7 +2,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import "../styles/main.css";
 import "../styles/refugee.css";
 import { useEffect, useRef, useState } from "react";
-import defaultProfilePicture from "./images/profile-picture.png"
+import defaultProfilePicture from "./images/profile-picture.png";
 
 const sidebarNavItems = [
     {
@@ -82,7 +82,7 @@ const Refugee = () => {
             });
             const data = await res.json();
             if (data.success) {
-                setHelpers(data.helpers);
+                setHelpers(data.helpers.reverse());
             }
         };
 
@@ -92,11 +92,11 @@ const Refugee = () => {
     }, [user]);
 
     function getImage() {
-      if (user.picture) {
-        return <img src={user.picture} />
-      }
+        if (user.picture) {
+            return <img src={user.picture} />;
+        }
 
-      return <img src={defaultProfilePicture} />
+        return <img src={defaultProfilePicture} />;
     }
 
     console.log(helpers);
@@ -105,50 +105,59 @@ const Refugee = () => {
         <div className="page-container">
             <div className="container">
                 {isAuthenticated && (
-                  <div>
-                    <div className="profile-details-container">
-                        <div className="image-container">
-                          {getImage()}
-                        </div>
-                        <div className="full-name">
-                            {user.given_name} {user.family_name}
-                        </div>
-                        <div className="btn-container">
-                          <button
-                              className="main__btn refugee-btn"
-                              onClick={() =>
-                                  logout({ returnTo: window.location.origin })
-                              }
-                          >
-                              Log Out
-                          </button>
-                          <button
-                              className="main__btn refugee-btn"
-                              onClick={getRoute}
-                          >
-                              Get Route
-                          </button>
+                    <div>
+                        <div className="profile-details-container">
+                            <div className="image-container">{getImage()}</div>
+                            <div className="full-name">
+                                {user.given_name} {user.family_name}
+                            </div>
+                            <div className="btn-container">
+                                <button
+                                    className="main__btn refugee-btn"
+                                    onClick={() =>
+                                        logout({
+                                            returnTo: window.location.origin,
+                                        })
+                                    }
+                                >
+                                    Log Out
+                                </button>
+                                {/*<button*/}
+                                {/*    className="main__btn refugee-btn"*/}
+                                {/*    onClick={getRoute}*/}
+                                {/*>*/}
+                                {/*    Get Route*/}
+                                {/*</button>*/}
+                            </div>
                         </div>
                     </div>
-                  </div>
                 )}
 
                 <div className="content">
                     {helpers.length != 0 && (
                         <ul>
-                          {
-                            helpers.map((value, index) => {
-                              return <li className="items-list">
-                                <div className="top-row">{value.help_type}</div>
-                                <div className="middle-row">
-                                    <div id="person-details">{value.fullName}, <i>{value.person_type}</i></div>
-                                    <div>Email: {value.email}</div>
-                                    <div>Phone: {value.phone_number}</div>
-                                </div>
-                                <div className="bottom-row"><u>Mesaj</u>: {value.message}</div>
-                              </li>
-                            })
-                          }
+                            {helpers.map((value, index) => {
+                                return (
+                                    <li className="items-list">
+                                        <div className="top-row">
+                                            {value.help_type}
+                                        </div>
+                                        <div className="middle-row">
+                                            <div id="person-details">
+                                                {value.fullName},{" "}
+                                                <i>{value.person_type}</i>
+                                            </div>
+                                            <div>Email: {value.email}</div>
+                                            <div>
+                                                Phone: {value.phone_number}
+                                            </div>
+                                        </div>
+                                        <div className="bottom-row">
+                                            <u>Mesaj</u>: {value.message}
+                                        </div>
+                                    </li>
+                                );
+                            })}
                         </ul>
                     )}
                 </div>

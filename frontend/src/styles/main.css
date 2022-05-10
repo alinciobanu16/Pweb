@@ -50,7 +50,7 @@
     border: none;
     color: black;
     text-align: center;
-    padding: 14px 50px;
+    padding: 10px 50px;
     margin: 4px 15px;
     font-size: 18px;
     transition: 0.3s;
@@ -72,6 +72,6 @@
 
     .main__btn {
         padding: 8px 15px;
-        width: 100px;
+        /*width: 100px;*/
     }
 }

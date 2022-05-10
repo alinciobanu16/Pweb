@@ -14,9 +14,9 @@ const Main = () => {
                 </h1>
 
                 <div className="main__container__btn">
-                    <Link to="/register" className="main__btn">
-                        Register
-                    </Link>
+                    {/*<Link to="/register" className="main__btn">*/}
+                    {/*    Register*/}
+                    {/*</Link>*/}
                     <button
                         className="main__btn"
                         onClick={() =>
@@ -25,14 +25,14 @@ const Main = () => {
                     >
                         Log In
                     </button>
-                    <button
-                        className="main__btn"
-                        onClick={() =>
-                            logout({ returnTo: window.location.origin })
-                        }
-                    >
-                        Log Out
-                    </button>
+                    {/*<button*/}
+                    {/*    className="main__btn"*/}
+                    {/*    onClick={() =>*/}
+                    {/*        logout({ returnTo: window.location.origin })*/}
+                    {/*    }*/}
+                    {/*>*/}
+                    {/*    Log Out*/}
+                    {/*</button>*/}
                 </div>
             </div>
         </div>

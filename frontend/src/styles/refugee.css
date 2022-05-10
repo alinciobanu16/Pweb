@@ -1,98 +1,114 @@
 .page-container {
-  background-image: linear-gradient(rgb(0 0 0 / 50%), rgb(0 0 0 / 50%)), url("../pages/images/ben-masora-p9Y6TIPhKBw-unsplash.jpg");
-  font-family: 'Roboto', sans-serif;
-  background-repeat: no-repeat;
-  background-size: cover;
-  min-height: 100vh;
-  background-position: center;
-  text-align: -webkit-center;
+    background-image: linear-gradient(rgb(0 0 0 / 60%), rgb(0 0 0 / 50%)), url("../pages/images/gayatri-malhotra-Y8sVdvfoybk-unsplash.jpg");
+    font-family: 'Roboto', sans-serif;
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 100vh;
+    background-position: center;
+    text-align: -webkit-center;
 }
 
 img {
-  border-radius: 5px;
-  border: solid 1px #294664;
+    border-radius: 5px;
+    border: solid 1px #294664;
 }
 
-button {
-  border-radius: 5px;
-}
+/*button {*/
+/*    border-radius: 5px;*/
+/*}*/
 
 .container {
-  justify-content: center;
-  display: flex;
-  padding: 1em;
+    justify-content: center;
+    display: flex;
+    padding: 1em;
 }
 
 .container > * {
-  flex: 0 0 auto;
+    flex: 0 0 auto;
 }
 
 .profile-details-container {
-  padding: 1em;
-  width: 15em;
-  text-align: -webkit-center;
-  background-color: rgb(225, 225, 225, 0.9);
-  border-radius: 0.5em;
-  margin-right: 1em;
+    padding: 1em;
+    width: 15em;
+    text-align: -webkit-center;
+    background-color: rgb(225, 225, 225, 0.9);
+    border-radius: 0.5em;
+    margin-right: 1em;
 }
 
 .content {
-  width: 40em;
+    width: 40em;
 }
 
 .refugee-btn {
-  background-color: #294664;
-  color: white;
-  padding: 10px;
+    background-color: #294664;
+    color: white;
+    padding: 10px;
+    border-radius: 4px;
 }
 
 .full-name {
-  margin: 1em 0 0.7em 0;
+    margin: 1em 0 0.7em 0;
 }
 
 ul {
-  list-style: none;
+    list-style: none;
 }
 
 .items-list {
-  list-style: none;
-  background-color: rgb(225, 225, 225, 0.9);
-  border-radius: 0.5em;
-  margin-bottom: 1em;
-  color: #294664;
-  padding: 15px;
-  text-align: left;
-  letter-spacing: 0.5px;
+    list-style: none;
+    background-color: rgb(225, 225, 225, 0.9);
+    border-radius: 0.5em;
+    margin-bottom: 1em;
+    color: #294664;
+    padding: 15px;
+    text-align: left;
+    letter-spacing: 0.5px;
 }
 
 .top-row {
-  margin-bottom: 10px;
-  padding: 2px 10px;
-  border: 1px solid #294664;
-  font-size: 25px;
-  border-radius: 5px;
+    margin-bottom: 10px;
+    padding: 2px 10px;
+    border: 1px solid #294664;
+    font-size: 25px;
+    border-radius: 5px;
 }
 
 .top-row::first-letter {
-  text-transform: capitalize;
+    text-transform: capitalize;
 }
 
 .bottom-row {
-  font-size: 0.8em;
+    font-size: 0.8em;
 }
 
 .middle-row {
-  margin-bottom: 10px;
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.2px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
 }
 
 #person-details {
-  text-transform: capitalize;
+    text-transform: capitalize;
 }
 
 .btn-container {
-  display: flex;
-  flex-direction: column;
+    /*display: flex;*/
+    /*flex-direction: column;*/
+}
+
+@media screen and (max-width: 900px) {
+    .container {
+        display: unset;
+    }
+
+    .content {
+        width: 20em;
+    }
+
+    .profile-details-container {
+        margin-bottom: 15px;
+        margin-right: 0;
+    }
 }
