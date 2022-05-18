@@ -120,21 +120,14 @@ const UserType = () => {
                                     color: "white",
                                     textAlign: "center",
                                     marginBottom: "5px",
+                                    fontSize: "30px",
                                 }}
                             >
-                                Welcome back, {user.name}
+                                <span>Welcome back, {user.name}</span>
                             </InputLabel>
                             <Link to={`/${userType}`} className="type__btn">
                                 Continue
                             </Link>
-                            <button
-                                className="type__btn"
-                                onClick={() =>
-                                    logout({ returnTo: window.location.origin })
-                                }
-                            >
-                                Log Out
-                            </button>
                         </>
                     )}
 
@@ -176,14 +169,6 @@ const UserType = () => {
                             </span>
                             <button className="type__btn" onClick={saveData}>
                                 Submit
-                            </button>
-                            <button
-                                className="type__btn"
-                                onClick={() =>
-                                    logout({ returnTo: window.location.origin })
-                                }
-                            >
-                                Log Out
                             </button>
                         </>
                     )}

@@ -44,32 +44,6 @@ const Refugee = () => {
     const [helpers, setHelpers] = useState([]);
     console.log(isAuthenticated);
 
-    // const callApi = () => {
-    //     fetch("http://localhost/api/public")
-    //         .then((res) => console.log(res.message))
-    //         .catch((err) => console.log(err.message));
-    // };
-    //
-    // const callApi2 = async () => {
-    //     const res = await fetch("http://localhost/api/public");
-    //     const data = await res.json();
-    //     console.log(data.message);
-    // };
-
-    const getRoute = async () => {
-        const token = await getAccessTokenSilently();
-        console.log(token);
-        const res = await fetch("http://localhost/api/private", {
-            method: "GET",
-            headers: {
-                "Content-type": "application/json",
-                Authorization: "Bearer " + token,
-            },
-        });
-        const data = await res.json();
-        console.log(data);
-    };
-
     useEffect(() => {
         const fetchData = async () => {
             const token = await getAccessTokenSilently();
@@ -92,10 +66,6 @@ const Refugee = () => {
     }, [user]);
 
     function getImage() {
-        if (user.picture) {
-            return <img src={user.picture} />;
-        }
-
         return <img src={defaultProfilePicture} />;
     }
 
@@ -122,19 +92,13 @@ const Refugee = () => {
                                 >
                                     Log Out
                                 </button>
-                                {/*<button*/}
-                                {/*    className="main__btn refugee-btn"*/}
-                                {/*    onClick={getRoute}*/}
-                                {/*>*/}
-                                {/*    Get Route*/}
-                                {/*</button>*/}
                             </div>
                         </div>
                     </div>
                 )}
 
                 <div className="content">
-                    {helpers.length != 0 && (
+                    {helpers.length !== 0 && (
                         <ul>
                             {helpers.map((value, index) => {
                                 return (
