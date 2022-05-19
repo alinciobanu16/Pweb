@@ -9,13 +9,14 @@ import {
 import { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Link, useNavigate } from "react-router-dom";
+import useWindowDimensions from "../utils/useWindowDimensions";
 
 const UserType = () => {
     const { logout, getAccessTokenSilently, isAuthenticated, user, isLoading } =
         useAuth0();
 
     const navigate = useNavigate();
-
+    const { height, width } = useWindowDimensions();
     const [userData, setUserData] = useState({
         name: "",
         username: "",
@@ -106,8 +107,6 @@ const UserType = () => {
         },
     });
 
-    // if (isLoading) return <div>Loading...</div>;
-
     return (
         isAuthenticated && (
             <div className="main__container">
@@ -123,7 +122,10 @@ const UserType = () => {
                                     fontSize: "30px",
                                 }}
                             >
-                                <span>Welcome back, {user.name}</span>
+                                <span className="type__title">
+                                    Welcome back, {width <= 600 ? <br /> : null}{" "}
+                                    {user.name}
+                                </span>
                             </InputLabel>
                             <Link to={`/${userType}`} className="type__btn">
                                 Continue

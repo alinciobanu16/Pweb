@@ -1,47 +1,42 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import "../styles/main.css";
 import "../styles/refugee.css";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import defaultProfilePicture from "./images/profile-picture.png";
+import { TextField, Alert, Box } from "@mui/material";
+import Button from "@mui/material/Button";
+import Modal from "@mui/material/Modal";
+import Fade from "@mui/material/Fade";
+import Backdrop from "@mui/material/Backdrop";
 
-const sidebarNavItems = [
-    {
-        display: "Dashboard",
-        icon: <i className="bx bx-home"></i>,
-        to: "/",
-        section: "",
-    },
-    {
-        display: "Getting Started",
-        icon: <i className="bx bx-star"></i>,
-        to: "/started",
-        section: "started",
-    },
-    {
-        display: "Calendar",
-        icon: <i className="bx bx-calendar"></i>,
-        to: "/calendar",
-        section: "calendar",
-    },
-    {
-        display: "User",
-        icon: <i className="bx bx-user"></i>,
-        to: "/user",
-        section: "user",
-    },
-    {
-        display: "Orders",
-        icon: <i className="bx bx-receipt"></i>,
-        to: "/order",
-        section: "order",
-    },
-];
+const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+    textAlign: "center",
+};
 
 const Refugee = () => {
     const { logout, getAccessTokenSilently, user, isAuthenticated } =
         useAuth0();
 
+    const [userType, setUserType] = useState("");
+
     const [helpers, setHelpers] = useState([]);
+    const [mailData, setMailData] = useState({
+        refName: "",
+        refEmail: "",
+        refPhoneNumber: "",
+        helpService: "",
+        helpEmail: "",
+    });
+
     console.log(isAuthenticated);
 
     useEffect(() => {
@@ -65,14 +60,72 @@ const Refugee = () => {
         }
     }, [user]);
 
+    useEffect(() => {
+        const fetchData = async () => {
+            const token = await getAccessTokenSilently();
+            const res = await fetch("http://localhost/api/check-user", {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                    Authorization: "Bearer " + token,
+                },
+                body: JSON.stringify(user),
+            });
+            const data = await res.json();
+            console.log(data);
+            if (data.success) {
+                setUserType(data.userType);
+            } else setUserType("");
+        };
+
+        if (isAuthenticated) {
+            fetchData();
+        }
+    }, [isAuthenticated]);
+
+    const [open, setOpen] = useState(false);
+    const [alertMsg, setAlertMsg] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+    const handleInput = (e) => {
+        setMailData({ ...mailData, [e.target.name]: e.target.value });
+    };
+
     function getImage() {
         return <img src={defaultProfilePicture} />;
     }
 
-    console.log(helpers);
+    const sendMail = async (e) => {
+        e.preventDefault();
+        const token = await getAccessTokenSilently();
+        const res = await fetch("http://localhost/api/send-mail", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+                Authorization: `Bearer` + token,
+            },
+            body: JSON.stringify(mailData),
+        });
+
+        const data = await res.json();
+        if (data.success) {
+            setMailData({
+                ...mailData,
+                helpEmail: "",
+                refEmail: "",
+                helpService: "",
+                refName: "",
+                refPhoneNumber: "",
+            });
+        }
+    };
 
     return (
         <div className="page-container">
+            <span className="text-white text-3xl flex items-center justify-center">
+                Active Services
+            </span>
             <div className="container">
                 {isAuthenticated && (
                     <div>
@@ -102,7 +155,7 @@ const Refugee = () => {
                         <ul>
                             {helpers.map((value, index) => {
                                 return (
-                                    <li className="items-list">
+                                    <li className="items-list" key={index}>
                                         <div className="top-row">
                                             {value.help_type}
                                         </div>
@@ -119,6 +172,121 @@ const Refugee = () => {
                                         <div className="bottom-row">
                                             <u>Mesaj</u>: {value.message}
                                         </div>
+                                        {userType === "refugee" && (
+                                            <div className="flex item-center justify-center mt-5">
+                                                <button
+                                                    className="main__btn refugee-btn"
+                                                    onClick={() => handleOpen()}
+                                                >
+                                                    Accept
+                                                </button>
+                                                <Modal
+                                                    aria-labelledby="transition-modal-title"
+                                                    aria-describedby="transition-modal-description"
+                                                    open={open}
+                                                    onClick={() => {
+                                                        setMailData({
+                                                            ...mailData,
+                                                            helpEmail:
+                                                                value.email,
+                                                            helpService:
+                                                                value.help_type,
+                                                        });
+                                                    }}
+                                                    onClose={() => {
+                                                        handleClose();
+                                                        // handleShow();
+                                                    }}
+                                                    closeAfterTransition
+                                                    BackdropComponent={Backdrop}
+                                                    BackdropProps={{
+                                                        timeout: 500,
+                                                    }}
+                                                >
+                                                    <Fade in={open}>
+                                                        <Box sx={style}>
+                                                            <TextField
+                                                                onChange={
+                                                                    handleInput
+                                                                }
+                                                                value={
+                                                                    mailData.refName
+                                                                }
+                                                                sx={{
+                                                                    width: "300px",
+                                                                }}
+                                                                id="standard-basic"
+                                                                label="Name"
+                                                                name="refName"
+                                                                variant="standard"
+                                                            />
+                                                            <TextField
+                                                                onChange={
+                                                                    handleInput
+                                                                }
+                                                                value={
+                                                                    mailData.refEmail
+                                                                }
+                                                                sx={{
+                                                                    width: "300px",
+                                                                    marginTop:
+                                                                        "7px",
+                                                                }}
+                                                                id="standard-basic"
+                                                                label="Email"
+                                                                name="refEmail"
+                                                                variant="standard"
+                                                            />
+                                                            <TextField
+                                                                onChange={
+                                                                    handleInput
+                                                                }
+                                                                value={
+                                                                    mailData.refPhoneNumber
+                                                                }
+                                                                sx={{
+                                                                    width: "300px",
+                                                                    marginTop:
+                                                                        "7px",
+                                                                }}
+                                                                id="standard-basic"
+                                                                label="Phone Number"
+                                                                name="refPhoneNumber"
+                                                                variant="standard"
+                                                            />
+
+                                                            <Button
+                                                                onClick={
+                                                                    sendMail
+                                                                }
+                                                                type="submit"
+                                                                fullWidth
+                                                                variant="contained"
+                                                                sx={{
+                                                                    mt: 3,
+                                                                    mb: 2,
+                                                                }}
+                                                            >
+                                                                Submit
+                                                            </Button>
+                                                            {/*{show ? (*/}
+                                                            {/*    <Alert*/}
+                                                            {/*        variant="filled"*/}
+                                                            {/*        severity="success"*/}
+                                                            {/*    >*/}
+                                                            {/*        Cererea ta a*/}
+                                                            {/*        fost*/}
+                                                            {/*        inregistrata*/}
+                                                            {/*        si asteapta*/}
+                                                            {/*        aprobarea*/}
+                                                            {/*        proprietarului.*/}
+                                                            {/*    </Alert>*/}
+                                                            {/*) : null}*/}
+                                                        </Box>
+                                                    </Fade>
+                                                </Modal>
+                                            </div>
+                                        )}
                                     </li>
                                 );
                             })}
