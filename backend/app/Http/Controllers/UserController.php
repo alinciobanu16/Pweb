@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use http\Env\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
+use stdClass;
 
 class UserController extends Controller
 {
@@ -50,6 +52,45 @@ class UserController extends Controller
 
         return response()->json([
             'success' => false,
+        ]);
+    }
+
+    public function sendEmail(Request $request): JsonResponse
+    {
+        $sendTo = $request['helpEmail'];
+        $refName = $request['refName'];
+        $refEmail = $request['refEmail'];
+        $helpService = $request['helpService'];
+        $refPhoneNumber = $request['refPhoneNumber'];
+
+        $connection = new AMQPStreamConnection('rabbitmq', 5672, 'guest', 'guest');
+        $channel = $connection->channel();
+        $channel->queue_declare('task_queue', false, true, false, false);
+
+        $data = new stdClass();
+        $data->refEmail = $refEmail;
+        $data->sendTo = $sendTo;
+        $data->refName = $refName;
+        $data->helpService = $helpService;
+        $data->refPhoneNumber = $refPhoneNumber;
+        $myJSON = json_encode($data);
+        $data = $myJSON;
+
+        if (empty($data)) {
+            $data = "Hello World!";
+        }
+        $msg = new AMQPMessage(
+            $data,
+            array('delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT)
+        );
+
+        $channel->basic_publish($msg, '', 'task_queue');
+
+        $channel->close();
+        $connection->close();
+
+        return response()->json([
+            'success' => true,
         ]);
     }
 }

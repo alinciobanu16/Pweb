@@ -28,10 +28,8 @@ Route::get('/public', function () {
 Route::get('/private', function () {
     return response()->json([
         'message' => 'Hello from a private endpoint! You need to be authenticated to see this.',
-        'authorized' => Auth::check(),
-        'user' => Auth::check() ? json_decode(json_encode((array) Auth::user(), JSON_THROW_ON_ERROR), true) : null,
     ], 200, [], JSON_PRETTY_PRINT);
-})->middleware(['auth0.authorize']);
+});
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -42,5 +40,6 @@ Route::group(['middleware' => ['auth0.authorize']], function () {
     Route::post('/check-user', [UserController::class, 'check_user']);
     Route::post('/helper', [HelperController::class, 'store']);
     Route::get('/helper', [HelperController::class, 'get_helpers']);
+    Route::post('/send-email', [UserController::class, 'sendEmail']);
 });
 

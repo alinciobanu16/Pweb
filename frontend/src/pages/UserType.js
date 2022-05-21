@@ -9,13 +9,13 @@ import {
 import { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Link, useNavigate } from "react-router-dom";
+import useWindowDimensions from "../utils/useWindowDimensions";
 
 const UserType = () => {
-    const { logout, getAccessTokenSilently, isAuthenticated, user, isLoading } =
-        useAuth0();
+    const { getAccessTokenSilently, isAuthenticated, user } = useAuth0();
 
     const navigate = useNavigate();
-
+    const { height, width } = useWindowDimensions();
     const [userData, setUserData] = useState({
         name: "",
         username: "",
@@ -50,7 +50,6 @@ const UserType = () => {
                 body: JSON.stringify(user),
             });
             const data = await res.json();
-            console.log(data);
             if (data.success) {
                 setUserType(data.userType);
             } else setUserType("");
@@ -59,11 +58,7 @@ const UserType = () => {
         if (isAuthenticated) {
             fetchData();
         }
-    }, [isAuthenticated]);
-
-    console.log(isAuthenticated);
-    console.log(userData);
-    console.log(userType);
+    }, [isAuthenticated, getAccessTokenSilently, user]);
 
     const saveData = async (e) => {
         e.preventDefault();
@@ -78,7 +73,6 @@ const UserType = () => {
         });
 
         const data = await res.json();
-        console.log(data);
         if (data.success) {
             navigate(`/${userData.userType}`);
         } else {
@@ -106,8 +100,6 @@ const UserType = () => {
         },
     });
 
-    // if (isLoading) return <div>Loading...</div>;
-
     return (
         isAuthenticated && (
             <div className="main__container">
@@ -123,7 +115,10 @@ const UserType = () => {
                                     fontSize: "30px",
                                 }}
                             >
-                                <span>Welcome back, {user.name}</span>
+                                <span className="">
+                                    Welcome back, {width <= 600 ? <br /> : null}{" "}
+                                    {user.name}
+                                </span>
                             </InputLabel>
                             <Link to={`/${userType}`} className="type__btn">
                                 Continue
