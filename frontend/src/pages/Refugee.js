@@ -27,17 +27,15 @@ const Refugee = () => {
         useAuth0();
 
     const [userType, setUserType] = useState("");
-
+    const [show, setShow] = useState(false);
     const [helpers, setHelpers] = useState([]);
     const [mailData, setMailData] = useState({
         refName: "",
-        refEmail: "",
+        refEmail: user.email,
         refPhoneNumber: "",
         helpService: "",
         helpEmail: "",
     });
-
-    console.log(isAuthenticated);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -58,7 +56,7 @@ const Refugee = () => {
         if (user) {
             fetchData();
         }
-    }, [user]);
+    }, [user, getAccessTokenSilently]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -72,7 +70,6 @@ const Refugee = () => {
                 body: JSON.stringify(user),
             });
             const data = await res.json();
-            console.log(data);
             if (data.success) {
                 setUserType(data.userType);
             } else setUserType("");
@@ -81,11 +78,20 @@ const Refugee = () => {
         if (isAuthenticated) {
             fetchData();
         }
-    }, [isAuthenticated]);
+    }, [isAuthenticated, getAccessTokenSilently, user]);
 
     const [open, setOpen] = useState(false);
-    const [alertMsg, setAlertMsg] = useState(false);
-    const handleOpen = () => setOpen(true);
+    const handleOpen = () => {
+        setOpen(true);
+        setMailData({
+            ...mailData,
+            helpEmail: "",
+            refEmail: user.email,
+            helpService: "",
+            refName: "",
+            refPhoneNumber: "",
+        });
+    };
     const handleClose = () => setOpen(false);
 
     const handleInput = (e) => {
@@ -93,17 +99,17 @@ const Refugee = () => {
     };
 
     function getImage() {
-        return <img src={defaultProfilePicture} />;
+        return <img src={defaultProfilePicture} alt="" />;
     }
 
     const sendMail = async (e) => {
         e.preventDefault();
         const token = await getAccessTokenSilently();
-        const res = await fetch("http://localhost/api/send-mail", {
+        const res = await fetch("http://localhost/api/send-email", {
             method: "POST",
             headers: {
                 "Content-type": "application/json",
-                Authorization: `Bearer` + token,
+                Authorization: "Bearer " + token,
             },
             body: JSON.stringify(mailData),
         });
@@ -118,7 +124,12 @@ const Refugee = () => {
                 refName: "",
                 refPhoneNumber: "",
             });
+            setShow(true);
         }
+    };
+
+    const handleShow = () => {
+        setShow(false);
     };
 
     return (
@@ -170,7 +181,7 @@ const Refugee = () => {
                                             </div>
                                         </div>
                                         <div className="bottom-row">
-                                            <u>Mesaj</u>: {value.message}
+                                            <u>Message</u>: {value.message}
                                         </div>
                                         {userType === "refugee" && (
                                             <div className="flex item-center justify-center mt-5">
@@ -195,7 +206,7 @@ const Refugee = () => {
                                                     }}
                                                     onClose={() => {
                                                         handleClose();
-                                                        // handleShow();
+                                                        handleShow();
                                                     }}
                                                     closeAfterTransition
                                                     BackdropComponent={Backdrop}
@@ -271,19 +282,19 @@ const Refugee = () => {
                                                             >
                                                                 Submit
                                                             </Button>
-                                                            {/*{show ? (*/}
-                                                            {/*    <Alert*/}
-                                                            {/*        variant="filled"*/}
-                                                            {/*        severity="success"*/}
-                                                            {/*    >*/}
-                                                            {/*        Cererea ta a*/}
-                                                            {/*        fost*/}
-                                                            {/*        inregistrata*/}
-                                                            {/*        si asteapta*/}
-                                                            {/*        aprobarea*/}
-                                                            {/*        proprietarului.*/}
-                                                            {/*    </Alert>*/}
-                                                            {/*) : null}*/}
+                                                            {show ? (
+                                                                <Alert
+                                                                    variant="filled"
+                                                                    severity="success"
+                                                                >
+                                                                    Your request
+                                                                    has been
+                                                                    sent to the
+                                                                    helper. He
+                                                                    will contact
+                                                                    you soon.
+                                                                </Alert>
+                                                            ) : null}
                                                         </Box>
                                                     </Fade>
                                                 </Modal>

@@ -5,9 +5,6 @@ use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use PhpAmqpLib\Connection\AMQPStreamConnection;
-use PhpAmqpLib\Message\AMQPMessage;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -38,32 +35,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-//Route::get('/send-email', function () {
-//    $connection = new AMQPStreamConnection('rabbitmq', 5672, 'guest', 'guest');
-//    $channel = $connection->channel();
-//    $channel->queue_declare('task_queue', false, true, false, false);
-//    $data = "Hello world";
-//    if (empty($data)) {
-//        $data = "Hello World!";
-//    }
-//    $msg = new AMQPMessage(
-//        $data,
-//        array('delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT)
-//    );
-//
-//    $channel->basic_publish($msg, '', 'task_queue');
-//
-//    echo ' [x] Sent ', $data, "\n";
-//
-//    $channel->close();
-//    $connection->close();
-//});
-Route::post('/send-email', [UserController::class, 'sendEmail']);
-
 Route::group(['middleware' => ['auth0.authorize']], function () {
     Route::post('/save-user', [UserController::class, 'store']);
     Route::post('/check-user', [UserController::class, 'check_user']);
     Route::post('/helper', [HelperController::class, 'store']);
     Route::get('/helper', [HelperController::class, 'get_helpers']);
+    Route::post('/send-email', [UserController::class, 'sendEmail']);
 });
 

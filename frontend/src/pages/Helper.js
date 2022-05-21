@@ -7,7 +7,6 @@ import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import { Alert } from "@mui/material";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -17,31 +16,13 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import backImg from "./images/daria-volkova-qhlmymt14Ys-unsplash.jpg";
 import { useEffect, useState } from "react";
 
-function Copyright(props) {
-    return (
-        <Typography
-            variant="body2"
-            color="text.secondary"
-            align="center"
-            {...props}
-        >
-            {"Copyright © "}
-            <Link to="/" className="text-sm underline">
-                Your Website
-            </Link>{" "}
-            {new Date().getFullYear()}
-            {"."}
-        </Typography>
-    );
-}
-
 const theme = createTheme();
 
 const Helper = () => {
     const { logout, getAccessTokenSilently, user } = useAuth0();
     const [helperData, setHelperData] = useState({
         fullName: "",
-        email: "",
+        email: user.email,
         phone_number: "",
         person_type: "",
         help_type: "",
@@ -58,20 +39,9 @@ const Helper = () => {
         });
     };
 
-    const [token, setToken] = useState("");
-    useEffect(() => {
-        const fetchData = async () => {
-            let tkn = await getAccessTokenSilently();
-            setToken(tkn);
-        };
-
-        if (user) {
-            fetchData();
-        }
-    }, [user]);
-
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const token = await getAccessTokenSilently();
         const res = await fetch("http://localhost/api/helper", {
             method: "POST",
             headers: {
@@ -82,7 +52,6 @@ const Helper = () => {
         });
 
         const data = await res.json();
-        console.log(data);
         if (!data.success) {
             setErrors(data.errors);
         } else {
@@ -176,6 +145,9 @@ const Helper = () => {
                                 autoComplete="fullName"
                                 autoFocus
                             />
+                            <span className="text-xs text-red-500 pb-2">
+                                {!!errors && errors.fullName}
+                            </span>
                             <TextField
                                 onChange={handleChange}
                                 value={helperData.email}
@@ -188,6 +160,9 @@ const Helper = () => {
                                 autoComplete="email"
                                 autoFocus
                             />
+                            <span className="text-xs text-red-500 pb-2">
+                                {!!errors && errors.email}
+                            </span>
                             <TextField
                                 onChange={handleChange}
                                 value={helperData.phone_number}
@@ -200,6 +175,9 @@ const Helper = () => {
                                 id="phone_number"
                                 autoComplete="phone_number"
                             />
+                            <span className="text-xs text-red-500 pb-2">
+                                {!!errors && errors.phone_number}
+                            </span>
                             <TextField
                                 onChange={handleChange}
                                 value={helperData.person_type}
@@ -212,6 +190,9 @@ const Helper = () => {
                                 id="person_type"
                                 autoComplete="person_type"
                             />
+                            <span className="text-xs text-red-500 pb-2">
+                                {!!errors && errors.person_type}
+                            </span>
                             <TextField
                                 onChange={handleChange}
                                 value={helperData.help_type}
@@ -224,6 +205,9 @@ const Helper = () => {
                                 id="help_type"
                                 autoComplete="help_type"
                             />
+                            <span className="text-xs text-red-500 pb-2">
+                                {!!errors && errors.help_type}
+                            </span>
                             <TextField
                                 onChange={handleChange}
                                 value={helperData.message}
@@ -236,6 +220,9 @@ const Helper = () => {
                                 id="message"
                                 autoComplete="message"
                             />
+                            <span className="text-xs text-red-500 pb-2">
+                                {!!errors && errors.message}
+                            </span>
 
                             <Button
                                 type="submit"
@@ -274,7 +261,6 @@ const Helper = () => {
                                     </button>
                                 </Grid>
                             </Grid>
-                            <Copyright sx={{ mt: 5 }} />
                         </Box>
                     </Box>
                 </Grid>

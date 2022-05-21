@@ -12,8 +12,7 @@ import { Link, useNavigate } from "react-router-dom";
 import useWindowDimensions from "../utils/useWindowDimensions";
 
 const UserType = () => {
-    const { logout, getAccessTokenSilently, isAuthenticated, user, isLoading } =
-        useAuth0();
+    const { getAccessTokenSilently, isAuthenticated, user } = useAuth0();
 
     const navigate = useNavigate();
     const { height, width } = useWindowDimensions();
@@ -51,7 +50,6 @@ const UserType = () => {
                 body: JSON.stringify(user),
             });
             const data = await res.json();
-            console.log(data);
             if (data.success) {
                 setUserType(data.userType);
             } else setUserType("");
@@ -60,11 +58,7 @@ const UserType = () => {
         if (isAuthenticated) {
             fetchData();
         }
-    }, [isAuthenticated]);
-
-    console.log(isAuthenticated);
-    console.log(userData);
-    console.log(userType);
+    }, [isAuthenticated, getAccessTokenSilently, user]);
 
     const saveData = async (e) => {
         e.preventDefault();
@@ -79,7 +73,6 @@ const UserType = () => {
         });
 
         const data = await res.json();
-        console.log(data);
         if (data.success) {
             navigate(`/${userData.userType}`);
         } else {
