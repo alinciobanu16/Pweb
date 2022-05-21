@@ -95,11 +95,6 @@ ul {
     text-transform: capitalize;
 }
 
-.btn-container {
-    /*display: flex;*/
-    /*flex-direction: column;*/
-}
-
 @media screen and (max-width: 900px) {
     .container {
         display: unset;
