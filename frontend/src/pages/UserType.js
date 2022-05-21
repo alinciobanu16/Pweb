@@ -122,7 +122,7 @@ const UserType = () => {
                                     fontSize: "30px",
                                 }}
                             >
-                                <span className="type__title">
+                                <span className="">
                                     Welcome back, {width <= 600 ? <br /> : null}{" "}
                                     {user.name}
                                 </span>

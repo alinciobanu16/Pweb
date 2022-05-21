@@ -175,7 +175,7 @@ const Refugee = () => {
                                         {userType === "refugee" && (
                                             <div className="flex item-center justify-center mt-5">
                                                 <button
-                                                    className="main__btn refugee-btn"
+                                                    className="refugee-btn"
                                                     onClick={() => handleOpen()}
                                                 >
                                                     Accept
@@ -265,6 +265,8 @@ const Refugee = () => {
                                                                 sx={{
                                                                     mt: 3,
                                                                     mb: 2,
+                                                                    backgroundColor:
+                                                                        "darkgreen",
                                                                 }}
                                                             >
                                                                 Submit
