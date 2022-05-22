@@ -1,0 +1,39 @@
+_format_version: "2.1"
+
+services:
+  - name: api-service
+    url: http://laravel.test/api
+    routes:
+      - name: api-route
+        paths: 
+          - /api
+          
+  # - name: db-adminer
+  #   url: http://adminer:8080
+  #   routes:
+  #     - name: adminer-service
+  #       paths:
+  #         - /adminer
+
+consumers:
+  - username: lab-student
+  - username: mihai
+
+plugins:
+  - name: prometheus
+#   - name: key-auth
+#     service: books-service
+  
+#   - name: acl
+#     service: books-service
+#     config:
+#       allow:
+#         - grupul-moby-lab
+
+# keyauth_credentials:
+#   - consumer: lab-student
+#   - consumer: mihai
+
+# acls:
+#   - consumer: lab-student
+#     group: grupul-moby-lab
