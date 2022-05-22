@@ -128,6 +128,8 @@ const Refugee = () => {
         }
     };
 
+    console.log(mailData);
+
     const handleShow = () => {
         setShow(false);
     };
@@ -187,15 +189,8 @@ const Refugee = () => {
                                             <div className="flex item-center justify-center mt-5">
                                                 <button
                                                     className="refugee-btn"
-                                                    onClick={() => handleOpen()}
-                                                >
-                                                    Accept
-                                                </button>
-                                                <Modal
-                                                    aria-labelledby="transition-modal-title"
-                                                    aria-describedby="transition-modal-description"
-                                                    open={open}
                                                     onClick={() => {
+                                                        handleOpen();
                                                         setMailData({
                                                             ...mailData,
                                                             helpEmail:
@@ -204,6 +199,13 @@ const Refugee = () => {
                                                                 value.help_type,
                                                         });
                                                     }}
+                                                >
+                                                    Accept
+                                                </button>
+                                                <Modal
+                                                    aria-labelledby="transition-modal-title"
+                                                    aria-describedby="transition-modal-description"
+                                                    open={open}
                                                     onClose={() => {
                                                         handleClose();
                                                         handleShow();
