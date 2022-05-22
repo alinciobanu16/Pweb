@@ -1,7 +1,53 @@
 # For more information: https://laravel.com/docs/sail
 version: '3'
 services:
+
+    portainer:
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+        restart: unless-stopped
+        image: portainer/portainer-ce:latest
+        #command: -H tcp://tasks.agent:9001 --tlsskipverify
+        ports:
+            - "9443:9443"
+            - "8000:8000"
+        volumes:
+            - /etc/localtime:/etc/localtime:ro
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - ./portainer-data:/data
+        networks:
+            - sail
+        # deploy:
+        #     placement:
+        #         constraints: [node.role == manager]
+
+
+    loki:
+        image: grafana/loki
+        volumes:
+            - ../configs/loki/loki.yml:/etc/config/loki.yml
+            - ../configs/loki/wal:/wal
+        entrypoint:
+            - /usr/bin/loki
+            - -config.file=/etc/config/loki.yml
+        ports:
+            - 3100:3100
+        networks:
+            - grafs
+    frontend:
+        build: ../frontend
+        ports:
+            - 3000:3000
+        networks:
+            - frontend
     laravel.test:
+        logging:
+            driver: loki
+            options:
+                loki-url: http://host.docker.internal:3100/loki/api/v1/push
+                loki-external-labels: job=myjob,owner=radu,environment=development
+
+        #entrypoint: sh -c "sleep 30 && php /var/www/html/artisan migrate:fresh"
         build:
             context: ./vendor/laravel/sail/runtimes/8.1
             dockerfile: Dockerfile
@@ -22,10 +68,46 @@ services:
         networks:
             - sail
         depends_on:
+            - rabbitmq
             - mysql
             - redis
-            - meilisearch
-            - selenium
+    rabbitmq:
+        image: rabbitmq:management-alpine
+        ports:
+            - 5672:5672
+            - 15672:15672
+        networks:
+            - queue
+            - sail
+        hostname: rabbitmq
+        container_name: 'rabbitmq'
+
+    worker:
+        restart: unless-stopped
+        build:
+            context: ../worker
+            dockerfile: Dockerfile
+        depends_on:
+            - rabbitmq
+        networks:
+            - queue
+            - sail
+
+    # consumer:
+    #     build:
+    #         context: ../workerJS
+    #         target: dev
+    #     volumes:
+    #         - .:/src
+    #     depends_on:
+    #         - rabbitmq
+    #     command: sh -c '/bin/wait-for-it.sh rabbitmq:5672 --timeout=30 -- node consumer.js'
+    #     environment:
+    #         NODE_ENV: production
+    #         AMQP_URL: amqp://guest:guest@rabbitmq:5672
+    #     networks:
+    #         - sail
+
     mysql:
         image: 'mysql/mysql-server:8.0'
         ports:
@@ -57,38 +139,68 @@ services:
             test: ["CMD", "redis-cli", "ping"]
             retries: 3
             timeout: 5s
-    meilisearch:
-        image: 'getmeili/meilisearch:latest'
-        ports:
-            - '${FORWARD_MEILISEARCH_PORT:-7700}:7700'
+    # adminer:
+    #     image: adminer
+    #     ports:
+    #         - 8080:8080
+    #     networks:
+    #         - database-admin
+    #         - internal
+
+    kong:
+        image: kong:latest
         volumes:
-            - 'sail-meilisearch:/data.ms'
-        networks:
-            - sail
-        healthcheck:
-            test: ["CMD", "wget", "--no-verbose", "--spider",  "http://localhost:7700/health"]
-            retries: 3
-            timeout: 5s
-    mailhog:
-        image: 'mailhog/mailhog:latest'
+            - ./Kong:/usr/local/kong/declarative
+        environment:
+            KONG_DATABASE: 'off'
+            KONG_DECLARATIVE_CONFIG: /usr/local/kong/declarative/kong.yml
+            KONG_PROXY_ACCESS_LOG: /dev/stdout
+            KONG_ADMIN_ACCESS_LOG: /dev/stdout
+            KONG_PROXY_ERROR_LOG: /dev/stderr
+            KONG_ADMIN_ERROR_LOG: /dev/stderr
+            KONG_ADMIN_LISTEN: 0.0.0.0:8001, 0.0.0.0:8444 ssl
         ports:
-            - '${FORWARD_MAILHOG_PORT:-1025}:1025'
-            - '${FORWARD_MAILHOG_DASHBOARD_PORT:-8025}:8025'
+            - 7000:8000
+            - 8443:8443
+            - 8001:8001
+            - 8444:8444
+        # deploy:
+        #     placement:
+        #         constraints: [node.role == manager]
         networks:
             - sail
-    selenium:
-        image: 'selenium/standalone-chrome'
-        volumes:
-            - '/dev/shm:/dev/shm'
-        networks:
-            - sail
+            - frontend
+            - grafs
+
+    grafana:
+      build: ./grafana
+      ports:
+        - 2000:3000
+      networks:
+        - grafs
+    
+    prometheus:
+      image: prom/prometheus
+      volumes:
+        - ./prometheus/config.yml:/etc/prometheus/prometheus.yml
+      ports:
+        - 9090:9090
+      networks:
+        - sail
+        - grafs
+
 networks:
     sail:
+        driver: bridge
+        attachable: true
+    frontend:
+        driver: bridge
+    grafs:
+        driver: bridge
+    queue:
         driver: bridge
 volumes:
     sail-mysql:
         driver: local
     sail-redis:
-        driver: local
-    sail-meilisearch:
         driver: local
