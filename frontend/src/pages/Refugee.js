@@ -128,8 +128,6 @@ const Refugee = () => {
         }
     };
 
-    console.log(mailData);
-
     const handleShow = () => {
         setShow(false);
     };
